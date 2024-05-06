@@ -83,5 +83,10 @@ public class Activity{
                 this.endTime = endTime;
             }
         }
+        @Override
+        public String toString() {
+            return "Activity [name=" + name + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
+                    + ", interrupts=" + interrupts + ", comments=" + comments + "]";
+        }
     
 }
