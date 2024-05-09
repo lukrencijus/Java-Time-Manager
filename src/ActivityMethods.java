@@ -19,14 +19,13 @@ import com.google.gson.reflect.TypeToken;
 public class ActivityMethods {
     public
         //inserting activity's data into Activity class
-        void insertion(Scanner inputRead, File dataFile) throws Exceptions, JsonIOException, IOException{
+        Activity insertion(Scanner inputRead, Activity activity) throws Exceptions, JsonIOException, IOException{
             String timeInput = null;
             String dateInput = null;
             int flag = 0;
 
 
             //filling activity data
-            Activity activity = new Activity(null, null, null, null, null, null);
             System.out.println("Insert name of the activity");
             activity.setName(inputRead.nextLine());
             
@@ -54,14 +53,14 @@ public class ActivityMethods {
             System.out.println("Insert interrupts (optional)");
             activity.setInterrupts(inputRead.nextLine());
 
-            //saving data to file
-            appendData(activity, dataFile);
+            return activity;
 
         }
 
         //extracts selected activities from storage and displays them
-        void extraction(Scanner inputRead, File dataFile) throws Exceptions, IOException{
+        String extraction(Scanner inputRead, File dataFile) throws Exceptions, IOException{
             String dateInput = null;
+
             System.out.println("Please insert date that you want to check (yyyy-MM-dd)");
             dateInput = inputRead.nextLine();
             if(dateInput == null || dateInput.isEmpty()){
@@ -71,7 +70,7 @@ public class ActivityMethods {
             else{
                 formatValidatorDate(dateInput);
             }
-            
+
             List<Activity> activities = readActivitiesFromFile(dataFile);
             System.out.println("Matching activities found: ");
             for(Activity activity : activities){
@@ -81,11 +80,48 @@ public class ActivityMethods {
                 }
 
             }
-            
 
+            return dateInput;
         }
 
-        
+        //activity that edits activity if certain matches are found(name, date)
+        void editing(Scanner inputRead, File dataFile) throws IOException, Exceptions{
+            List<Activity> activities = readActivitiesFromFile(dataFile);
+            String activityName;
+            String activityDate;
+            activityDate = extraction(inputRead, dataFile);
+
+            System.out.println("Please insert activity name from the displayed");
+            activityName = inputRead.nextLine();
+            for(int i = 0; i < activities.size(); i++){
+                if(activities.get(i).getDate().equals(activityDate) && activities.get(i).getName().equals(activityName)){
+                    activities.set(i, insertion(inputRead, activities.get(i)));
+                    writeActivitesToFile(dataFile, activities);
+                    return;
+                }
+            }
+            System.out.println("No matching activities found");
+        }
+
+        //method that removes activity if certain matches are found(name, date)
+        void remove(Scanner inputRead, File dataFile) throws IOException, Exceptions{
+            List<Activity> activities = readActivitiesFromFile(dataFile);
+            String activityName;
+            String activityDate;
+
+            activityDate = extraction(inputRead, dataFile);
+
+            System.out.println("Please insert activity name from the displayed");
+            activityName = inputRead.nextLine();
+            for(int i = 0; i < activities.size(); i++){
+                if(activities.get(i).getDate().equals(activityDate) && activities.get(i).getName().equals(activityName)){
+                    activities.remove(i);
+                    writeActivitesToFile(dataFile, activities);
+                    return;
+                }
+            }
+            System.out.println("No matching activities found");
+        }
 
 
     private
@@ -152,17 +188,25 @@ public class ActivityMethods {
             }
             
         }
-        //appends data to json storage file
+        //appends data to json storage file used for live time activity saving
         void appendData(Activity activity, File dataFile) throws IOException{
             List<Activity> activities = readActivitiesFromFile(dataFile);
 
-            activities.add(activity);
+                activities.add(activity);
+
 
             try(FileWriter writer = new FileWriter(dataFile)){
                 Gson gson = new Gson();
                 gson.toJson(activities, writer);
             }
             
+        }
+        //general writing to files, used for removal and editing
+        void writeActivitesToFile(File dataFile, List<Activity> activities) throws IOException{
+            try(FileWriter writer = new FileWriter(dataFile)){
+                Gson gson = new Gson();
+                gson.toJson(activities, writer);
+            }
         }
 
         //reads all contents from the file into an array list
