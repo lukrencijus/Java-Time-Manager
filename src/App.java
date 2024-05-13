@@ -22,7 +22,11 @@ public class App {
 
             try {
                 while(true){
-                    System.out.println("[1] Inserting activities\n[2] Displaying activities\n[3] Editing activities\n[4] Removing activites\n[5] Exit");
+                    System.out.println("[1] Inserting activities\n" +
+                            "[2] Displaying activities\n" +
+                            "[3] Editing activities\n" +
+                            "[4] Removing activites\n" +
+                            "[5] Exit");
                     action = read.nextInt();
                     read.nextLine();
 
