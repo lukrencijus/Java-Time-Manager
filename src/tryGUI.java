@@ -28,7 +28,7 @@ public class tryGUI
         removeButton = new JButton("Remove Activities");
         exitButton = new JButton("Exit Time Manager");
 
-        image = new ImageIcon("../Icons/clock.jpg");
+        image = new ImageIcon("../Icons/icon.png");
 
         label = new JLabel();
         label.setText("Welcome to Time Manager!");
