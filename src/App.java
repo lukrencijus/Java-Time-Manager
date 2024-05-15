@@ -14,8 +14,8 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args){
-
-        ActivityMethods activityMethods = new ActivityMethods();
+        FileManager fileManager = new FileManager();
+        ActivityManager activityMethods = new ActivityManager();
         int action;
         Scanner read = new Scanner(System.in);
         File filePath = new File("./JSON_files/storage.json");
@@ -28,7 +28,7 @@ public class App {
                     read.nextLine();
 
                     if(action == 1){
-                        activityMethods.appendData(activityMethods.insertion(read, activity), filePath);
+                        fileManager.appendData(activityMethods.insertion(read, activity), filePath);
                     }
 
                     else if(action == 2){
