@@ -22,8 +22,7 @@ public class tryGUI {
     ActivityMethods activityMethods = new ActivityMethods();
     Activity activity = new Activity();
 
-    File filePath = new File("../projektasGAME/java/JSON_files/storage.json");
-    //Pakeisti path
+    File filePath = new File("../JSON_files/storage.json");
 
     public tryGUI() {
         frame = new JFrame();
