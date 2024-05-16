@@ -9,8 +9,6 @@
 //Program was tested on Windows 11 64 bit and macOS arm64
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 
@@ -20,7 +18,7 @@ public class App {
         ActivityManager activityMethods = new ActivityManager();
         int action;
         Scanner read = new Scanner(System.in);
-        File filePath = pathOfFile().toFile();
+        File filePath = new File("./JSON_files/storage.json");
 
         System.out.println(filePath);
         Activity activity = new Activity();
@@ -65,19 +63,4 @@ public class App {
     }
     
 
-    private static Path pathOfFile(){
-        Path currentDir = Paths.get(System.getProperty("user.dir"));
-
-        Path parrentDir = currentDir.getParent();
-        System.out.println(parrentDir);
-
-        Path targetDir = parrentDir.resolve("Java-Time-Manager");
-
-        Path targetDir1 = targetDir.resolve("JSON_files");
-
-        Path filePath = targetDir1.resolve("storage.json");
-        
-
-        return filePath.toAbsolutePath();
-    }
 }
