@@ -17,6 +17,7 @@ public class App {
 
         ActivityMethods activityMethods = new ActivityMethods();
         int action;
+        String input = "";
         Scanner read = new Scanner(System.in);
         File filePath = new File("../JSON_files/storage.json");
 
