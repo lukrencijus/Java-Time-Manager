@@ -16,10 +16,11 @@ public class App {
     public static void main(String[] args){
 
         ActivityMethods activityMethods = new ActivityMethods();
+        Activity activity = new Activity();
         int action;
         String input = "";
         Scanner read = new Scanner(System.in);
-        File filePath = new File("../JSON_files/storage.json");
+        File filePath = new File("./JSON_files/storage.json");
 
             try {
                 while(true){
@@ -32,7 +33,7 @@ public class App {
                     read.nextLine();
 
                     if(action == 1){
-                        activityMethods.appendData(activityMethods.insertion(read, null), filePath);
+                        activityMethods.appendData(activityMethods.insertion(read, activity), filePath);
                     }
 
                     else if(action == 2){
