@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 
 public class tryGUI {
@@ -22,7 +25,9 @@ public class tryGUI {
     ActivityMethods activityMethods = new ActivityMethods();
     Activity activity = new Activity();
 
-    File filePath = new File("../JSON_files/storage.json");
+    Scanner read = new Scanner(System.in);
+
+    File filePath = new File("./JSON_files/storage.json");
 
     public tryGUI() {
         frame = new JFrame();
@@ -135,6 +140,23 @@ public class tryGUI {
             }
         });
 
+        //Display button is pressed
+        displayButton.addActionListener(e -> {
+            String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to check (YYYY-MM-DD)", "Displaying activities", JOptionPane.PLAIN_MESSAGE);
+            if (displayActivities != null) {
+                try {
+                    activityMethods.extraction(read, filePath);
+                } catch (Exceptions ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(frame, "Displaying activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         exitButton.addActionListener(e -> {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -142,8 +164,8 @@ public class tryGUI {
 
     }
 
-        public static void main(String[] args) {
-            new tryGUI();
-        }
-
+    public static void main(String[] args) {
+        new tryGUI();
     }
+
+}
