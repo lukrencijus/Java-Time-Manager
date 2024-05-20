@@ -10,7 +10,7 @@ public class Activity{
         String endTime;
         String interrupts;
         String comments;
-    public Activity(String name, String date, String startTime, String endTime, String interrupts, String comments) {
+    public Activity() {
             this.name = name;
             this.date = date;
             this.startTime = startTime;
