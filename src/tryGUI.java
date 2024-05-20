@@ -38,7 +38,7 @@ public class tryGUI {
         removeButton = new JButton("Remove Activities");
         exitButton = new JButton("Exit Time Manager");
 
-        image = new ImageIcon("../Icons/icon.png");
+        image = new ImageIcon("./Icons/icon.png");
 
         label = new JLabel();
         label.setText("Welcome to Time Manager!");
@@ -142,7 +142,8 @@ public class tryGUI {
 
         // Display button is pressed
         displayButton.addActionListener(e -> {
-            String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to check (YYYY-MM-DD)", "Displaying activities", JOptionPane.PLAIN_MESSAGE);
+            String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to check (YYYY-MM-DD)\n" +
+                    "If nothing is entered, it will be set to today's", "Displaying activities", JOptionPane.PLAIN_MESSAGE);
             if (displayActivities != null) {
                 try {
                     activityManagerGUI.extraction(displayActivities, filePath);
@@ -155,6 +156,24 @@ public class tryGUI {
                 JOptionPane.showMessageDialog(frame, "Displaying activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        // Edit button is pressed
+        editButton.addActionListener(e -> {
+            String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to edit (YYYY-MM-DD)\n" +
+                    "If nothing is entered, it will be set to today's", "Editing activities", JOptionPane.PLAIN_MESSAGE);
+            if (displayActivities != null) {
+                try {
+                    activityManagerGUI.extractionWithEditing(displayActivities, filePath);
+                } catch (Exceptions ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Editing activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
 
         exitButton.addActionListener(e -> {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
