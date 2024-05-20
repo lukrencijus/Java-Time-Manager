@@ -21,6 +21,7 @@ public class tryGUI {
     private JButton exitButton;
 
     ActivityManager activityManager = new ActivityManager();
+    ActivityManagerGUI activityManagerGUI = new ActivityManagerGUI();
     Activity activity = new Activity();
     FileManager fileManager = new FileManager();
 
@@ -139,20 +140,18 @@ public class tryGUI {
             }
         });
 
-        //Display button is pressed
+        // Display button is pressed
         displayButton.addActionListener(e -> {
             String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to check (YYYY-MM-DD)", "Displaying activities", JOptionPane.PLAIN_MESSAGE);
             if (displayActivities != null) {
                 try {
-                    activityManager.extraction(read, filePath);
+                    activityManagerGUI.extraction(displayActivities, filePath);
                 } catch (Exceptions ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-            }
-            else
-            {
+            } else {
                 JOptionPane.showMessageDialog(frame, "Displaying activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });

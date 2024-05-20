@@ -18,6 +18,12 @@ public class Exceptions extends Exception{
             JOptionPane.showMessageDialog(tryGUI.frame, "Illegal format", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public static class NotFound extends Exceptions{
+        public NotFound(){
+            super("Not Found", null);
+            JOptionPane.showMessageDialog(tryGUI.frame, "No matching activities were found", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 
     
