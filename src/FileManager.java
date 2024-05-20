@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class FileManager {
-    void appendData(Activity activity, File dataFile) throws IOException{
+    static void appendData(Activity activity, File dataFile) throws IOException{
             List<Activity> activities = readDataFromFile(dataFile);
 
                 activities.add(activity);
@@ -30,7 +30,7 @@ public class FileManager {
         }
 
         //reads all contents from the file into an array list
-        List<Activity> readDataFromFile(File dataFile) throws IOException{
+        static List<Activity> readDataFromFile(File dataFile) throws IOException{
             List<Activity> activities = new ArrayList<>();
             if(dataFile.exists() && dataFile.length() > 0){
                 try(FileReader reader = new FileReader(dataFile)){

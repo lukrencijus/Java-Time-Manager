@@ -20,8 +20,9 @@ public class tryGUI {
     private JButton removeButton;
     private JButton exitButton;
 
-    ActivityMethods activityMethods = new ActivityMethods();
+    ActivityManager activityManager = new ActivityManager();
     Activity activity = new Activity();
+    FileManager fileManager = new FileManager();
 
     Scanner read = new Scanner(System.in);
 
@@ -78,7 +79,7 @@ public class tryGUI {
                 if (date != null)
                 {
                     try {
-                        activityMethods.formatValidatorDate(date);
+                        activityManager.formatValidatorDate(date);
                         activity.setDate(date);
                     } catch (Exceptions ex) {
                         throw new RuntimeException(ex);
@@ -89,7 +90,7 @@ public class tryGUI {
                     {
                         int flag = 0;
                         try {
-                            activityMethods.formatValidatorTime(startingTime, flag);
+                            activityManager.formatValidatorTime(startingTime, flag);
                             flag++;
                             activity.setStartTime(startingTime);
                         } catch (Exceptions ex) {
@@ -100,7 +101,7 @@ public class tryGUI {
                         if(endingTime != null)
                         {
                             try {
-                                activityMethods.formatValidatorTime(endingTime, flag);
+                                activityManager.formatValidatorTime(endingTime, flag);
                                 activity.setEndTime(endingTime);
                             } catch (Exceptions ex) {
                                 throw new RuntimeException(ex);
@@ -112,7 +113,7 @@ public class tryGUI {
                             activity.setInterrupts(interrupts);
 
                             try {
-                                activityMethods.appendData(activity, filePath);
+                                FileManager.appendData(activity, filePath);
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -143,7 +144,7 @@ public class tryGUI {
             String displayActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to check (YYYY-MM-DD)", "Displaying activities", JOptionPane.PLAIN_MESSAGE);
             if (displayActivities != null) {
                 try {
-                    activityMethods.extraction(read, filePath);
+                    activityManager.extraction(read, filePath);
                 } catch (Exceptions ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
