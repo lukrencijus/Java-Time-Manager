@@ -124,7 +124,8 @@ public class ActivityMethods {
         }
 
 
-    public//Validates time format
+    private
+        //Validates time format
         void formatValidatorTime(String timeInput, int flag) throws Exceptions{
             if(timeInput == null  && flag == 0|| timeInput.isEmpty() && flag == 0){
                 return;
