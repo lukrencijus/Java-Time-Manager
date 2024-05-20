@@ -14,26 +14,23 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args){
-
-        ActivityMethods activityMethods = new ActivityMethods();
-        Activity activity = new Activity();
+        FileManager fileManager = new FileManager();
+        ActivityManager activityMethods = new ActivityManager();
         int action;
-        String input = "";
         Scanner read = new Scanner(System.in);
         File filePath = new File("./JSON_files/storage.json");
 
+        System.out.println(filePath);
+        Activity activity = new Activity();
+
             try {
                 while(true){
-                    System.out.println("[1] Inserting activities\n" +
-                            "[2] Displaying activities\n" +
-                            "[3] Editing activities\n" +
-                            "[4] Removing activites\n" +
-                            "[5] Exit");
+                    System.out.println("[1] Inserting activities\n[2] Displaying activities\n[3] Editing activities\n[4] Removing activites\n[5] Exit");
                     action = read.nextInt();
                     read.nextLine();
 
                     if(action == 1){
-                        activityMethods.appendData(activityMethods.insertion(read, activity), filePath);
+                        fileManager.appendData(activityMethods.insertion(read, activity), filePath);
                     }
 
                     else if(action == 2){
@@ -64,4 +61,6 @@ public class App {
                 read.close();
             }
     }
+    
+
 }

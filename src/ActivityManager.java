@@ -1,22 +1,20 @@
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 
-import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
-import com.google.gson.reflect.TypeToken;
 
 //methods dedicated to managing activities
-public class ActivityMethods {
+public class ActivityManager {
+    private
+    FileManager fileManager = new FileManager();
+
     public
         //inserting activity's data into Activity class
         Activity insertion(Scanner inputRead, Activity activity) throws Exceptions, JsonIOException, IOException{
@@ -71,7 +69,7 @@ public class ActivityMethods {
                 formatValidatorDate(dateInput);
             }
 
-            List<Activity> activities = readActivitiesFromFile(dataFile);
+            List<Activity> activities = fileManager.readDataFromFile(dataFile);
             System.out.println("Matching activities found: ");
             for(Activity activity : activities){
 
@@ -86,7 +84,7 @@ public class ActivityMethods {
 
         //activity that edits activity if certain matches are found(name, date)
         void editing(Scanner inputRead, File dataFile) throws IOException, Exceptions{
-            List<Activity> activities = readActivitiesFromFile(dataFile);
+            List<Activity> activities = fileManager.readDataFromFile(dataFile);
             String activityName;
             String activityDate;
             activityDate = extraction(inputRead, dataFile);
@@ -96,7 +94,7 @@ public class ActivityMethods {
             for(int i = 0; i < activities.size(); i++){
                 if(activities.get(i).getDate().equals(activityDate) && activities.get(i).getName().equals(activityName)){
                     activities.set(i, insertion(inputRead, activities.get(i)));
-                    writeActivitesToFile(dataFile, activities);
+                    fileManager.writeDataToFile(dataFile, activities);
                     return;
                 }
             }
@@ -105,7 +103,7 @@ public class ActivityMethods {
 
         //method that removes activity if certain matches are found(name, date)
         void remove(Scanner inputRead, File dataFile) throws IOException, Exceptions{
-            List<Activity> activities = readActivitiesFromFile(dataFile);
+            List<Activity> activities = fileManager.readDataFromFile(dataFile);
             String activityName;
             String activityDate;
 
@@ -116,7 +114,7 @@ public class ActivityMethods {
             for(int i = 0; i < activities.size(); i++){
                 if(activities.get(i).getDate().equals(activityDate) && activities.get(i).getName().equals(activityName)){
                     activities.remove(i);
-                    writeActivitesToFile(dataFile, activities);
+                    fileManager.writeDataToFile(dataFile, activities);
                     return;
                 }
             }
@@ -186,40 +184,5 @@ public class ActivityMethods {
                 throw new Exceptions.IllegalFormat();
             }
             
-        }
-        //appends data to json storage file used for live time activity saving
-        void appendData(Activity activity, File dataFile) throws IOException{
-            List<Activity> activities = readActivitiesFromFile(dataFile);
-
-                activities.add(activity);
-
-
-            try(FileWriter writer = new FileWriter(dataFile)){
-                Gson gson = new Gson();
-                gson.toJson(activities, writer);
-            }
-            
-        }
-        //general writing to files, used for removal and editing
-        void writeActivitesToFile(File dataFile, List<Activity> activities) throws IOException{
-            try(FileWriter writer = new FileWriter(dataFile)){
-                Gson gson = new Gson();
-                gson.toJson(activities, writer);
-            }
-        }
-
-        //reads all contents from the file into an array list
-        List<Activity> readActivitiesFromFile(File dataFile) throws IOException{
-            List<Activity> activities = new ArrayList<>();
-            if(dataFile.exists() && dataFile.length() > 0){
-                try(FileReader reader = new FileReader(dataFile)){
-                    Gson gson = new Gson();
-                    java.lang.reflect.Type activityListType = new TypeToken<List<Activity>>() {}.getType();
-                    activities = gson.fromJson(reader, activityListType);
-                    
-                }
-            }
-            return activities;
-
         }
 }
