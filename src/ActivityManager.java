@@ -42,7 +42,7 @@ public class ActivityManager {
 
             System.out.println("Insert ending time (HH:mm)");
             timeInput = inputRead.nextLine();
-            formatValidatorTime(timeInput,flag);
+            formatValidatorTime(timeInput, flag);
             activity.setEndTime(timeInput);
 
             System.out.println("Insert comments (optional)");
@@ -129,6 +129,11 @@ public class ActivityManager {
                 return;
             }
             try{
+
+                if(timeInput == null && flag == 1  || timeInput.isEmpty() && flag == 1){
+                    throw new Exceptions.EmptyFieldException();
+                }
+
                 String pattern = "HH:mm";
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
