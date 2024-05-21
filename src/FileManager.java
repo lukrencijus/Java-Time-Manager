@@ -11,18 +11,15 @@ import com.google.gson.reflect.TypeToken;
 public class FileManager {
     static void appendData(Activity activity, File dataFile) throws IOException{
             List<Activity> activities = readDataFromFile(dataFile);
-
                 activities.add(activity);
-
-
             try(FileWriter writer = new FileWriter(dataFile)){
                 Gson gson = new Gson();
                 gson.toJson(activities, writer);
             }
-            
         }
+
         //general writing to files, used for removal and editing
-        void writeDataToFile(File dataFile, List<Activity> activities) throws IOException{
+        static void writeDataToFile(File dataFile, List<Activity> activities) throws IOException{
             try(FileWriter writer = new FileWriter(dataFile)){
                 Gson gson = new Gson();
                 gson.toJson(activities, writer);
@@ -37,7 +34,7 @@ public class FileManager {
                     Gson gson = new Gson();
                     java.lang.reflect.Type activityListType = new TypeToken<List<Activity>>() {}.getType();
                     activities = gson.fromJson(reader, activityListType);
-                    
+
                 }
             }
             return activities;

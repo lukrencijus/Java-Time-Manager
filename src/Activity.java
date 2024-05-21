@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class Activity{
     private
@@ -11,7 +12,9 @@ public class Activity{
         String interrupts;
         String comments;
     public
-        String getName() {
+
+        String getName()
+        {
             return name;
         }
         void setName(String name) throws Exceptions{
@@ -65,20 +68,27 @@ public class Activity{
             return endTime;
         }
 
-        public void setEndTime(String endTime) {
-            if(endTime == null){
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-                this.startTime = LocalTime.now().format(format);
-                System.out.println("Time has been set to current local time");
-            }
-            else{
-                this.endTime = endTime;
-            }
+    public void setEndTime(String endTime) throws Exceptions.IllegalFormat {
+        if (timeValidator(endTime) == true) {
+            this.endTime = endTime;
+        } else {
+            throw new Exceptions.IllegalFormat();
         }
+    }
         @Override
         public String toString() {
             return "Activity [name=" + name + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
                     + ", interrupts=" + interrupts + ", comments=" + comments + "]";
         }
+
+    private boolean timeValidator(String endTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        LocalTime start = LocalTime.parse(startTime, formatter);
+
+        LocalTime end = LocalTime.parse(endTime, formatter);
+
+        return end.isAfter(start);
+    }
     
 }

@@ -174,6 +174,23 @@ public class tryGUI {
             }
         });
 
+        // Remove button is pressed
+        removeButton.addActionListener(e -> {
+            String removeActivities = JOptionPane.showInputDialog(frame, "Please insert date that you want to remove (YYYY-MM-DD)\n" +
+                    "If nothing is entered, it will be set to today's", "Removing activities", JOptionPane.PLAIN_MESSAGE);
+            if (removeActivities != null) {
+                try {
+                    activityManagerGUI.extractionForRemoval(removeActivities, filePath);
+                } catch (Exceptions ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Removing activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
 
         exitButton.addActionListener(e -> {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
