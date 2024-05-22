@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 public class Activity{
     private
@@ -29,7 +28,6 @@ public class Activity{
         }
         void setDate(String date) throws Exceptions{
             if(date == null || date.isEmpty()){
-                System.out.println("Local date has been set");
                 JOptionPane.showMessageDialog(tryGUI.frame, "Date has been set to current date", "Current local date", JOptionPane.INFORMATION_MESSAGE);
                 this.date = LocalDate.now().toString();
             }
@@ -58,7 +56,6 @@ public class Activity{
             if(startTime == null || startTime.isEmpty()){
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
                 this.startTime = LocalTime.now().format(format);
-                System.out.println("Time has been set to current local time");
                 JOptionPane.showMessageDialog(tryGUI.frame, "Time has been set to current time", "Current local time", JOptionPane.INFORMATION_MESSAGE);
             
             }
@@ -86,11 +83,8 @@ public class Activity{
 
     private boolean timeValidator(String endTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
         LocalTime start = LocalTime.parse(startTime, formatter);
-
         LocalTime end = LocalTime.parse(endTime, formatter);
-
         return end.isAfter(start);
     }
     

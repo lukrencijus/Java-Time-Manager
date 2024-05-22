@@ -3,16 +3,12 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class tryGUI {
     public
         static JFrame frame;
 
-    private
-        JPanel panel;
-
-        ImageIcon image;
+    ImageIcon image;
         JLabel label;
 
         JButton insertButton;
@@ -21,7 +17,6 @@ public class tryGUI {
         JButton removeButton;
         JButton exitButton;
 
-        ActivityManager activityManager = new ActivityManager();
         ActivityManagerGUI activityManagerGUI = new ActivityManagerGUI();
         Activity activity = new Activity();
 
@@ -31,7 +26,6 @@ public class tryGUI {
         frame = new JFrame();
 
         // Main menu buttons
-
         image = new ImageIcon("./Icons/icon.png");
         label = new JLabel();
         label.setText("Welcome to Time Manager!");
@@ -43,7 +37,7 @@ public class tryGUI {
         removeButton = new JButton("Remove Activities");
         exitButton = new JButton("Exit Time Manager");
 
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 100, 300));
         panel.setLayout(new GridLayout(6, 1));
 
@@ -62,6 +56,7 @@ public class tryGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setIconImage(image.getImage());
+        frame.setLocationRelativeTo(null);
 
         // Insert button is pressed
         insertButton.addActionListener(e -> {
@@ -79,7 +74,7 @@ public class tryGUI {
                             "Insert activity", JOptionPane.PLAIN_MESSAGE);
                     if (date != null) {
                         try {
-                            activityManager.formatValidatorDate(date);
+                            ActivityManagerGUI.formatValidatorDate(date);
                             activity.setDate(date);
                         } catch (Exceptions ex) {
                             throw new RuntimeException(ex);
@@ -91,7 +86,7 @@ public class tryGUI {
                         if (startingTime != null) {
                             int flag = 0;
                             try {
-                                activityManager.formatValidatorTime(startingTime, flag);
+                                activityManagerGUI.formatValidatorTime(startingTime, flag);
                                 flag++;
                                 activity.setStartTime(startingTime);
                             } catch (Exceptions ex) {
@@ -101,7 +96,7 @@ public class tryGUI {
                             String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
                             if (endingTime != null) {
                                 try {
-                                    activityManager.formatValidatorTime(endingTime, flag);
+                                    activityManagerGUI.formatValidatorTime(endingTime, flag);
                                     activity.setEndTime(endingTime);
                                 } catch (Exceptions ex) {
                                     throw new RuntimeException(ex);
@@ -169,9 +164,7 @@ public class tryGUI {
         });
 
         // Exit button is pressed
-        exitButton.addActionListener(e -> {
-            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-        });
+        exitButton.addActionListener(e -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 
     }
 
