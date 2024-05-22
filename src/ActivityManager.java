@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 import com.google.gson.JsonIOException;
 
+import javax.swing.*;
+
 //methods dedicated to managing activities
 public class ActivityManager {
     private
@@ -64,6 +66,7 @@ public class ActivityManager {
             if(dateInput == null || dateInput.isEmpty()){
                 dateInput = LocalDate.now().toString();
                 System.out.println("Current local date has been set");
+                JOptionPane.showMessageDialog(tryGUI.frame, "Date has been set to today's", "Current local date", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
                 formatValidatorDate(dateInput);

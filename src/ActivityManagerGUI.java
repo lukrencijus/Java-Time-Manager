@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ActivityManagerGUI {
 
@@ -17,7 +15,7 @@ public class ActivityManagerGUI {
     FileManager fileManager = new FileManager();
 
     // Extracts selected activities from storage and displays them
-    void extraction(String input, File dataFile) throws Exceptions, IOException {
+    void extraction(String input, File dataFile, int num, int num2) throws Exceptions, IOException {
         String dateInput = input;
         if (dateInput == null || dateInput.isEmpty()) {
             dateInput = LocalDate.now().toString();
@@ -27,90 +25,68 @@ public class ActivityManagerGUI {
             ActivityManagerGUI.formatValidatorDate(dateInput);
         }
 
-        List<Activity> activities = FileManager.readDataFromFile(dataFile);
-        if (activities == null || activities.isEmpty()) {
-            throw new Exceptions.NotFound();
-        } else {
-            JFrame displayFrame = new JFrame("Matching Activities");
-            displayFrame.setLayout(new GridLayout(0, 1));
-
-            for (Activity activity : activities) {
-                if (activity.getDate().equals(dateInput)) {
-                    JPanel activityPanel = new JPanel();
-                    activityPanel.setBackground(Color.PINK);
-                    activityPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-                    JTextArea textArea = new JTextArea(activity.toString(), 5, 30);
-                    textArea.setEditable(false);
-                    textArea.setForeground(Color.BLACK);
-                    textArea.setBackground(Color.PINK);
-
-                    activityPanel.add(textArea);
-                    displayFrame.add(activityPanel);
+            List<Activity> activities = FileManager.readDataFromFile(dataFile);
+            if (activities == null || activities.isEmpty()) {
+                throw new Exceptions.NotFound();
+            } else {
+                boolean activityExists = false;
+                for (Activity activity : activities) {
+                    if (activity.getDate().equals(dateInput)) {
+                        activityExists = true;
+                        break;
+                    }
                 }
-            }
+                if (!activityExists) {
+                    JOptionPane.showMessageDialog(
+                            tryGUI.frame, "No activity found for the entered date: " + dateInput, "Activity Not Found", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                        JFrame displayFrame = new JFrame("Matching Activities");
+                        displayFrame.setLayout(new GridLayout(0, 1));
 
-            displayFrame.setSize(700, 300);
-            displayFrame.setResizable(false);
-            displayFrame.setLocationRelativeTo(tryGUI.frame);
-            displayFrame.setVisible(true);
-        }
-    }
+                        for (Activity activity : activities) {
+                            if (activity.getDate().equals(dateInput)) {
+                                JPanel activityPanel = new JPanel();
+                                activityPanel.setBackground(Color.PINK);
+                                activityPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-    // Extracts selected activities from storage and displays them to edit them
-    void extractionWithEditing(String input, File dataFile) throws Exceptions, IOException {
-        String dateInput = input;
-        if (dateInput == null || dateInput.isEmpty()) {
-            dateInput = LocalDate.now().toString();
-            JOptionPane.showMessageDialog(
-                    tryGUI.frame, "Nothing was entered, date has been set to current local date", "Date has been set", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            ActivityManagerGUI.formatValidatorDate(dateInput);
-        }
+                                JTextArea textArea = new JTextArea(activity.toString(), 5, 30);
+                                textArea.setEditable(false);
+                                textArea.setForeground(Color.BLACK);
+                                textArea.setBackground(Color.PINK);
 
-        List<Activity> activities = FileManager.readDataFromFile(dataFile);
-        if (activities == null || activities.isEmpty()) {
-            throw new Exceptions.NotFound();
-        } else {
-            JFrame displayFrame = new JFrame("Matching Activities");
-            displayFrame.setLayout(new GridLayout(0, 1));
+                                if (num == 1){
+                                    textArea.addMouseListener(new MouseAdapter() {
+                                        @Override
+                                        public void mouseClicked(MouseEvent e) {
+                                            try {
+                                                if (num2 == 1)
+                                                {
+                                                    openEditDialogForRemoval(activity, dataFile);
+                                                    return;
+                                                }
+                                                openEditDialog(activity, dataFile);
+                                            } catch (Exceptions | IOException ex) {
+                                                throw new RuntimeException(ex);
+                                            }
+                                        }
+                                    });
+                                }
 
-            for (Activity activity : activities) {
-                if (activity.getDate().equals(dateInput)) {
-                    JPanel activityPanel = new JPanel();
-                    activityPanel.setBackground(Color.PINK);
-                    activityPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-                    JTextArea textArea = new JTextArea(activity.toString(), 5, 30);
-                    textArea.setEditable(false);
-                    textArea.setForeground(Color.BLACK);
-                    textArea.setBackground(Color.PINK);
-
-                    textArea.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            try {
-                                openEditDialog(activity, dataFile);
-                            } catch (Exceptions | IOException ex) {
-                                throw new RuntimeException(ex);
+                                activityPanel.add(textArea);
+                                displayFrame.add(activityPanel);
                             }
                         }
-                    });
 
-                    activityPanel.add(textArea);
-                    displayFrame.add(activityPanel);
+                        displayFrame.setSize(700, 300);
+                        displayFrame.setResizable(false);
+                        displayFrame.setLocationRelativeTo(tryGUI.frame);
+                        displayFrame.setVisible(true);
+                    }
                 }
-            }
-
-            displayFrame.setSize(700, 300);
-            displayFrame.setResizable(false);
-            displayFrame.setLocationRelativeTo(tryGUI.frame);
-            displayFrame.setVisible(true);
         }
-    }
+
 
     private void openEditDialog(Activity activity, File dataFile) throws Exceptions, IOException {
-        removeForEditing(activity, dataFile);
         JTextField nameField = new JTextField(activity.getName());
         JTextField dateField = new JTextField(activity.getDate());
         JTextField startTimeField = new JTextField(activity.getStartTime());
@@ -132,11 +108,9 @@ public class ActivityManagerGUI {
         panel.add(new JLabel("Interrupts:"));
         panel.add(interruptsField);
 
-
-
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Edit Activity", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-
+            removeForRemoval(activity, dataFile);
             activity.setName(nameField.getText());
             activity.setDate(dateField.getText());
             activity.setStartTime(startTimeField.getText());
@@ -150,58 +124,6 @@ public class ActivityManagerGUI {
             JOptionPane.showMessageDialog(tryGUI.frame, "Editing activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
-
-    // Extracts selected activities from storage and displays them to edit them
-    void extractionForRemoval(String input, File dataFile) throws Exceptions, IOException {
-        String dateInput = input;
-        if (dateInput == null || dateInput.isEmpty()) {
-            dateInput = LocalDate.now().toString();
-            JOptionPane.showMessageDialog(
-                    tryGUI.frame, "Nothing was entered, date has been set to current local date", "Date has been set", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            ActivityManagerGUI.formatValidatorDate(dateInput);
-        }
-
-        List<Activity> activities = FileManager.readDataFromFile(dataFile);
-        if (activities == null || activities.isEmpty()) {
-            throw new Exceptions.NotFound();
-        } else {
-            JFrame displayFrame = new JFrame("Matching Activities");
-            displayFrame.setLayout(new GridLayout(0, 1));
-
-            for (Activity activity : activities) {
-                if (activity.getDate().equals(dateInput)) {
-                    JPanel activityPanel = new JPanel();
-                    activityPanel.setBackground(Color.PINK);
-                    activityPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-                    JTextArea textArea = new JTextArea(activity.toString(), 5, 30);
-                    textArea.setEditable(false);
-                    textArea.setForeground(Color.BLACK);
-                    textArea.setBackground(Color.PINK);
-
-                    textArea.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            try {
-                                openEditDialogForRemoval(activity, dataFile);
-                            } catch (Exceptions | IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }
-                    });
-
-                    activityPanel.add(textArea);
-                    displayFrame.add(activityPanel);
-                }
-            }
-
-            displayFrame.setSize(700, 300);
-            displayFrame.setResizable(false);
-            displayFrame.setLocationRelativeTo(tryGUI.frame);
-            displayFrame.setVisible(true);
-        }
     }
 
     private void openEditDialogForRemoval(Activity activity, File dataFile) throws Exceptions, IOException {
@@ -234,20 +156,8 @@ public class ActivityManagerGUI {
 
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Are you sure?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-//            activity.setName(nameField.getText());
-//            activity.setDate(dateField.getText());
-//            activity.setStartTime(startTimeField.getText());
-//            activity.setEndTime(endTimeField.getText());
-//            activity.setComments(commentsField.getText());
-//            activity.setInterrupts(interruptsField.getText());
-
-            //System.out.println(activity);
             removeForRemoval(activity, dataFile);
         }
-        else {
-            JOptionPane.showMessageDialog(tryGUI.frame, "Removing activities was cancelled", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
     }
 
     void removeForRemoval(Activity activity, File dataFile) throws IOException, Exceptions {
@@ -266,28 +176,7 @@ public class ActivityManagerGUI {
 
         if (removed) {
             fileManager.writeDataToFile(dataFile, activities);
-            JOptionPane.showMessageDialog(tryGUI.frame, "Activity removed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(tryGUI.frame, "No matching activities found", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    void removeForEditing(Activity activity, File dataFile) throws IOException, Exceptions {
-        List<Activity> activities = fileManager.readDataFromFile(dataFile);
-        String activityDate = activity.getDate();
-        String activityName = activity.getName();
-        boolean removed = false;
-
-        for (int i = 0; i < activities.size(); i++) {
-            if (activities.get(i).getDate().equals(activityDate) && activities.get(i).getName().equals(activityName)) {
-                activities.remove(i);
-                removed = true;
-                break;
-            }
-        }
-
-        if (removed) {
-            fileManager.writeDataToFile(dataFile, activities);
+            JOptionPane.showMessageDialog(tryGUI.frame, "Activity modified successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(tryGUI.frame, "No matching activities found", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -295,7 +184,6 @@ public class ActivityManagerGUI {
 
     //validates date format
     static void formatValidatorDate(String dateInput) throws Exceptions{
-
         if(dateInput == null || dateInput.isEmpty()){
             return;
         }
