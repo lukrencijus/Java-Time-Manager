@@ -83,8 +83,8 @@ public class Activity{
                 .append("Date: ").append(date).append("\n")
                 .append("Start Time: ").append(startTime).append("\n")
                 .append("End Time: ").append(endTime).append("\n")
-                .append("Comments: ").append(comments).append("\n")
-                .append("Interrupts: ").append(interrupts).append("\n");
+                .append("Interrupts: ").append(interrupts).append("\n")
+                .append("Comments: ").append(comments).append("\n");
         return sb.toString();
     }
 

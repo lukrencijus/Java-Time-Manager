@@ -127,10 +127,10 @@ public class ActivityManagerGUI {
         panel.add(startTimeField);
         panel.add(new JLabel("End Time:"));
         panel.add(endTimeField);
-        panel.add(new JLabel("Comments:"));
-        panel.add(commentsField);
         panel.add(new JLabel("Interrupts:"));
         panel.add(interruptsField);
+        panel.add(new JLabel("Comments:"));
+        panel.add(commentsField);
 
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Edit Activity", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -143,7 +143,10 @@ public class ActivityManagerGUI {
             activity.setInterrupts(interruptsField.getText());
 
             FileManager.appendData(activity, dataFile);
-            extraction(activity.getDate(), dataFile, 0, 0);
+            extraction(activity.getDate(), dataFile, 1, 0);
+        }
+        else{
+            extraction(activity.getDate(), dataFile, 1, 0);
         }
     }
 
@@ -157,10 +160,10 @@ public class ActivityManagerGUI {
         startTimeField.setEditable(false);
         JTextField endTimeField = new JTextField(activity.getEndTime());
         endTimeField.setEditable(false);
-        JTextField commentsField = new JTextField(activity.getComments());
-        commentsField.setEditable(false);
         JTextField interruptsField = new JTextField(activity.getInterrupts());
         interruptsField.setEditable(false);
+        JTextField commentsField = new JTextField(activity.getComments());
+        commentsField.setEditable(false);
 
         JPanel panel = new JPanel(new GridLayout(6, 2));
         panel.add(new JLabel("Name:"));
@@ -179,7 +182,10 @@ public class ActivityManagerGUI {
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Are you sure?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             removeForRemoval(activity, dataFile);
-            extraction(activity.getDate(), dataFile, 0, 0);
+            extraction(activity.getDate(), dataFile, 1, 1);
+        }
+        else {
+            extraction(activity.getDate(), dataFile, 1, 1);
         }
     }
 

@@ -79,7 +79,7 @@ public class tryGUI {
 
                 }
             }
-                    
+
             String date = JOptionPane.showInputDialog(frame,
                     "<html>Enter date (YYYY-MM-DD)<br>" +
                     "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
@@ -89,7 +89,7 @@ public class tryGUI {
                     ActivityManagerGUI.formatValidatorDate(date);
                     activity.setDate(date);
                 } catch (Exceptions ex) {
-                    
+
                 }
             } else{
                 return;
@@ -105,15 +105,15 @@ public class tryGUI {
                         flag++;
                         activity.setStartTime(startingTime);
                     } catch (Exceptions ex) {
-                        
+
                     }
                 } else{
                     return;
                 }
-                
+
                 while(flag == 1){
                     String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                    
+
                         try {
                             activityManagerGUI.formatValidatorTime(endingTime, flag);
                             activity.setEndTime(endingTime);
@@ -126,7 +126,7 @@ public class tryGUI {
                         } catch (Exceptions ex) {
 
                         }
-                    
+
                 }
 
                 String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
@@ -193,7 +193,20 @@ public class tryGUI {
         });
 
         // Exit button is pressed
-        exitButton.addActionListener(e -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
+        exitButton.addActionListener(e -> {
+            JOptionPane optionPane = new JOptionPane("Have a good day :)", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            JDialog dialog = optionPane.createDialog("Good Bye");
+            dialog.setLocationRelativeTo(frame);
+
+            Timer timer = new Timer(600, event -> {
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                dialog.dispose();
+            });
+            timer.setRepeats(false);
+            timer.start();
+
+            dialog.setVisible(true);
+        });
 
     }
 
