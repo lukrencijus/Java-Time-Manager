@@ -75,11 +75,18 @@ public class Activity{
             throw new Exceptions.IllegalFormat();
         }
     }
-        @Override
-        public String toString() {
-            return  name + "(date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
-                    + ", interrupts=" + interrupts + ", comments=" + comments + ")";
-        }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Activity: ").append(name).append("\n")
+                .append("Date: ").append(date).append("\n")
+                .append("Start Time: ").append(startTime).append("\n")
+                .append("End Time: ").append(endTime).append("\n")
+                .append("Comments: ").append(comments).append("\n")
+                .append("Interrupts: ").append(interrupts).append("\n");
+        return sb.toString();
+    }
 
     private boolean timeValidator(String endTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");

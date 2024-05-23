@@ -51,7 +51,7 @@ public class ActivityManagerGUI {
                         activityPanel.setBackground(Color.PINK);
                         activityPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                        JTextArea textArea = new JTextArea(activity.toString(), 5, 30);
+                        JTextArea textArea = new JTextArea(activity.toString(), 6, 10);
                         textArea.setEditable(false);
                         textArea.setForeground(Color.BLACK);
                         textArea.setBackground(Color.PINK);
@@ -100,7 +100,7 @@ public class ActivityManagerGUI {
 
                 displayFrame.add(goBackButton, BorderLayout.SOUTH);
 
-                displayFrame.setSize(700, 300);
+                displayFrame.setSize(700, 400);
                 displayFrame.setResizable(false);
                 displayFrame.setLocationRelativeTo(tryGUI.frame);
                 displayFrame.setVisible(true);
