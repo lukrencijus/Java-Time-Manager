@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class tryGUI {
     public
@@ -20,7 +21,8 @@ public class tryGUI {
         ActivityManagerGUI activityManagerGUI = new ActivityManagerGUI();
         Activity activity = new Activity();
 
-        File filePath = new File("./JSON_files/storage.json");
+        File filePath = FileManager.pathOfFile().toFile();
+        Path iconPath = FileManager.pathOfIcon();
 
         int flag = 0;
 
@@ -28,7 +30,7 @@ public class tryGUI {
         frame = new JFrame();
 
         // Main menu buttons
-        image = new ImageIcon("./Icons/icon.png");
+        image = new ImageIcon(String.valueOf(iconPath));
         label = new JLabel();
         label.setText("Welcome to Time Manager!");
         label.setIcon(image);
