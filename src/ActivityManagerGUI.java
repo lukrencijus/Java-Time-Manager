@@ -64,9 +64,11 @@ public class ActivityManagerGUI {
                                     try {
                                         if (num2 == 1) {
                                             openEditDialogForRemoval(activity, dataFile);
+                                            displayFrame.dispose();
                                             return;
                                         }
                                         openEditDialog(activity, dataFile);
+                                        displayFrame.dispose();
                                     } catch (Exceptions | IOException ex) {
                                         throw new RuntimeException(ex);
                                     }
@@ -141,6 +143,7 @@ public class ActivityManagerGUI {
             activity.setInterrupts(interruptsField.getText());
 
             FileManager.appendData(activity, dataFile);
+            extraction(activity.getDate(), dataFile, 0, 0);
         }
     }
 
@@ -176,6 +179,7 @@ public class ActivityManagerGUI {
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Are you sure?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             removeForRemoval(activity, dataFile);
+            extraction(activity.getDate(), dataFile, 0, 0);
         }
     }
 

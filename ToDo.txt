@@ -1,5 +1,3 @@
 Sutvarkyti toString() metodą - gražesnei reprezentacijai veiklų
 
 Pridėti scrollinimą apačioje, nes netelpa kartais
-
-Iškviesti naujai display po editinimo arba removinimo
