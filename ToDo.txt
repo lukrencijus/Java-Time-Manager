@@ -1,5 +1,11 @@
-Sutvarkyti toString() metodą - gražesnei reprezentacijai veiklų
+ToDo:
+    Sutvarkyti toString() metodą - gražesnei reprezentacijai veiklų
 
-Pridėti scrollinimą apačioje, nes netelpa kartais
+    Pridėti scrollinimą apačioje, nes netelpa kartais
 
-FIXME: kai activity yra insertinimas, jeigu kazka irasai illegal format tai vis tiek toliau tesiasi insertinimas
+    Pakeisti extraction() logiką
+
+FixMe:
+    
+
+

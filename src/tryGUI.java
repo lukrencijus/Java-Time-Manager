@@ -111,7 +111,7 @@ public class tryGUI {
                     return;
                 }
 
-                while(flag == 1){
+                while(true){
                     String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
 
                         try {
