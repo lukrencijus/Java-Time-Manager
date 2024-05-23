@@ -22,6 +22,8 @@ public class tryGUI {
 
         File filePath = new File("./JSON_files/storage.json");
 
+        int flag = 0;
+
     public tryGUI() {
         frame = new JFrame();
 
@@ -60,63 +62,88 @@ public class tryGUI {
 
         // Insert button is pressed
         insertButton.addActionListener(e -> {
-            String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                if (activityName != null) {
-                    try {
-                        activity.setName(activityName);
-                    } catch (Exceptions ex) {
-                        throw new RuntimeException(ex);
+            flag = 0;
+            while(true){
+                String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                try {
+                    if(activityName == null){
+                        return;
                     }
-
-                    String date = JOptionPane.showInputDialog(frame,
-                            "<html>Enter date (YYYY-MM-DD)<br>" +
-                            "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
-                            "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                    if (date != null) {
-                        try {
-                            ActivityManagerGUI.formatValidatorDate(date);
-                            activity.setDate(date);
-                        } catch (Exceptions ex) {
-                            throw new RuntimeException(ex);
-                        }
-                        String startingTime = JOptionPane.showInputDialog(frame,
-                                "<html>Insert starting time (HH:MM)<br>" +
-                                "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
-                                "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                        if (startingTime != null) {
-                            int flag = 0;
-                            try {
-                                activityManagerGUI.formatValidatorTime(startingTime, flag);
-                                flag++;
-                                activity.setStartTime(startingTime);
-                            } catch (Exceptions ex) {
-                                throw new RuntimeException(ex);
-                            }
-
-                            String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                            if (endingTime != null) {
-                                try {
-                                    activityManagerGUI.formatValidatorTime(endingTime, flag);
-                                    activity.setEndTime(endingTime);
-                                } catch (Exceptions ex) {
-                                    throw new RuntimeException(ex);
-                                }
-
-                                String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                                activity.setComments(comments);
-                                String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                                activity.setInterrupts(interrupts);
-
-                                try {
-                                    FileManager.appendData(activity, filePath);
-                                } catch (IOException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                            }
-                        }
+                    activity.setName(activityName);
+                    if(!activity.getName().isEmpty() && activity.getName() != null){
+                        break;
                     }
+                } catch (Exceptions ex) {
+
                 }
-        });
+            }
+                    
+            String date = JOptionPane.showInputDialog(frame,
+                    "<html>Enter date (YYYY-MM-DD)<br>" +
+                    "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
+                    "Insert activity", JOptionPane.PLAIN_MESSAGE);
+            if (date != null) {
+                try {
+                    ActivityManagerGUI.formatValidatorDate(date);
+                    activity.setDate(date);
+                } catch (Exceptions ex) {
+                    
+                }
+            } else{
+                return;
+            }
+
+                String startingTime = JOptionPane.showInputDialog(frame,
+                        "<html>Insert starting time (HH:MM)<br>" +
+                        "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
+                        "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                if (startingTime != null) {
+                    try {
+                        activityManagerGUI.formatValidatorTime(startingTime, flag);
+                        flag++;
+                        activity.setStartTime(startingTime);
+                    } catch (Exceptions ex) {
+                        
+                    }
+                } else{
+                    return;
+                }
+                
+                while(flag == 1){
+                    String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                    
+                        try {
+                            activityManagerGUI.formatValidatorTime(endingTime, flag);
+                            activity.setEndTime(endingTime);
+                            if(endingTime == null){
+                                return;
+                            }
+                            if(activity.getEndTime() != null && !activity.getEndTime().isEmpty()){
+                                break;
+                            }
+                        } catch (Exceptions ex) {
+
+                        }
+                    
+                }
+
+                String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                activity.setComments(comments);
+                if(comments == null){
+                    return;
+                }
+                String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                activity.setInterrupts(interrupts);
+                if(interrupts == null){
+                    return;
+                }
+
+                try {
+                    FileManager.appendData(activity, filePath);
+                } catch (IOException ex) {
+                }
+            }
+        );
 
         // Display button is pressed
         displayButton.addActionListener(e -> {

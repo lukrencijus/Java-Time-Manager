@@ -77,8 +77,8 @@ public class Activity{
     }
         @Override
         public String toString() {
-            return "Activity [name=" + name + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
-                    + ", interrupts=" + interrupts + ", comments=" + comments + "]";
+            return  name + "(date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
+                    + ", interrupts=" + interrupts + ", comments=" + comments + ")";
         }
 
     private boolean timeValidator(String endTime){
