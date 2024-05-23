@@ -42,7 +42,7 @@ public class tryGUI {
         exitButton = new JButton("Exit Time Manager");
 
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 100, 300));
+        panel.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200));
         panel.setLayout(new GridLayout(6, 1));
 
         panel.add(label);

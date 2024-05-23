@@ -1,8 +1,6 @@
 ToDo:
     Sutvarkyti toString() metodą - gražesnei reprezentacijai veiklų
 
-    Pridėti scrollinimą apačioje, nes netelpa kartais
-
     Pakeisti extraction() logiką
 
 FixMe:

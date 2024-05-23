@@ -43,7 +43,10 @@ public class ActivityManagerGUI {
                         tryGUI.frame, "No activity found for the entered date: " + dateInput, "Activity Not Found", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JFrame displayFrame = new JFrame("Matching Activities");
-                displayFrame.setLayout(new GridLayout(0, 1));
+                displayFrame.setLayout(new BorderLayout());
+
+                JPanel activitiesPanel = new JPanel();
+                activitiesPanel.setLayout(new GridLayout(4, 3));
 
                 for (Activity activity : activities) {
                     if (activity.getDate().equals(dateInput)) {
@@ -87,9 +90,12 @@ public class ActivityManagerGUI {
                         }
 
                         activityPanel.add(textArea);
-                        displayFrame.add(activityPanel);
+                        activitiesPanel.add(activityPanel);
                     }
                 }
+                JScrollPane scrollPane = new JScrollPane(activitiesPanel);
+
+
                 JButton goBackButton = new JButton("Go Back");
                 goBackButton.setBackground(Color.PINK);
                 goBackButton.setOpaque(true);
@@ -98,9 +104,10 @@ public class ActivityManagerGUI {
                     displayFrame.dispose();
                 });
 
+                displayFrame.add(scrollPane, BorderLayout.CENTER);
                 displayFrame.add(goBackButton, BorderLayout.SOUTH);
 
-                displayFrame.setSize(700, 400);
+                displayFrame.setSize(602, 400);
                 displayFrame.setResizable(false);
                 displayFrame.setLocationRelativeTo(tryGUI.frame);
                 displayFrame.setVisible(true);
