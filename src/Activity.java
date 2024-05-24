@@ -79,12 +79,13 @@ public class Activity{
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Activity:             ").append(name).append("\n")
-                .append("Date:                 ").append(date).append("\n")
+
+        sb.append("Activity:              ").append(name).append("\n")
+                .append("Date:                  ").append(date).append("\n")
                 .append("Start Time:        ").append(startTime).append("\n")
                 .append("End Time:         ").append(endTime).append("\n")
-                .append("Interrupts:        ").append(interrupts).append("\n")
-                .append("Comments:      ").append(comments).append("\n");
+                .append("Interrupts:         ").append(interrupts).append("\n")
+                .append("Comments:     ").append(comments).append("\n");
         return sb.toString();
     }
 

@@ -262,7 +262,7 @@ public class ActivityManagerGUI {
         }
     }
 
-    void removeForRemoval(Activity activity, File dataFile) throws IOException, Exceptions {
+    private void removeForRemoval(Activity activity, File dataFile) throws IOException, Exceptions {
         List<Activity> activities = fileManager.readDataFromFile(dataFile);
         String activityDate = activity.getDate();
         String activityName = activity.getName();
@@ -285,7 +285,7 @@ public class ActivityManagerGUI {
     }
 
     // Validates date format
-    static void formatValidatorDate(String dateInput) throws Exceptions {
+    private static void formatValidatorDate(String dateInput) throws Exceptions {
         if (dateInput == null || dateInput.isEmpty()) {
             return;
         }
@@ -313,7 +313,7 @@ public class ActivityManagerGUI {
     }
 
     // Validates time format
-    void formatValidatorTime(String timeInput, int flag) throws Exceptions {
+    private void formatValidatorTime(String timeInput, int flag) throws Exceptions {
         if (timeInput == null && flag == 0 || timeInput.isEmpty() && flag == 0) {
             return;
         }
