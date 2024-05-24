@@ -64,86 +64,7 @@ public class tryGUI {
 
         // Insert button is pressed
         insertButton.addActionListener(e -> {
-            flag = 0;
-            while(true){
-                String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                try {
-                    if(activityName == null){
-                        return;
-                    }
-                    activity.setName(activityName);
-                    if(!activity.getName().isEmpty() && activity.getName() != null){
-                        break;
-                    }
-                } catch (Exceptions ex) {
-
-                }
-            }
-
-            String date = JOptionPane.showInputDialog(frame,
-                    "<html>Enter date (YYYY-MM-DD)<br>" +
-                    "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
-                    "Insert activity", JOptionPane.PLAIN_MESSAGE);
-            if (date != null) {
-                try {
-                    ActivityManagerGUI.formatValidatorDate(date);
-                    activity.setDate(date);
-                } catch (Exceptions ex) {
-
-                }
-            } else{
-                return;
-            }
-
-                String startingTime = JOptionPane.showInputDialog(frame,
-                        "<html>Insert starting time (HH:MM)<br>" +
-                        "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
-                        "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                if (startingTime != null) {
-                    try {
-                        activityManagerGUI.formatValidatorTime(startingTime, flag);
-                        flag++;
-                        activity.setStartTime(startingTime);
-                    } catch (Exceptions ex) {
-
-                    }
-                } else{
-                    return;
-                }
-
-                while(true){
-                    String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-
-                        try {
-                            activityManagerGUI.formatValidatorTime(endingTime, flag);
-                            activity.setEndTime(endingTime);
-                            if(endingTime == null){
-                                return;
-                            }
-                            if(activity.getEndTime() != null && !activity.getEndTime().isEmpty()){
-                                break;
-                            }
-                        } catch (Exceptions ex) {
-
-                        }
-
-                }
-
-                String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                activity.setComments(comments);
-                if(comments == null){
-                    return;
-                }
-                String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                activity.setInterrupts(interrupts);
-                if(interrupts == null){
-                    return;
-                }
-
-                try {
-                    FileManager.appendData(activity, filePath);
-                } catch (IOException ex) {
-                }
+                activityManagerGUI.insert(flag, filePath, activity, frame);
             }
         );
 
@@ -155,7 +76,7 @@ public class tryGUI {
                     "Displaying activities", JOptionPane.PLAIN_MESSAGE);
             if (displayActivities != null) {
                 try {
-                    activityManagerGUI.extraction(displayActivities, filePath, 0, 0);
+                    activityManagerGUI.extraction(displayActivities, filePath, false, false);
                 } catch (Exceptions | IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -170,7 +91,7 @@ public class tryGUI {
                     "Editing activities", JOptionPane.PLAIN_MESSAGE);
             if (editActivities != null) {
                 try {
-                    activityManagerGUI.extraction(editActivities, filePath, 1, 0);
+                    activityManagerGUI.extraction(editActivities, filePath, true, false);
                 } catch (Exceptions | IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -185,7 +106,7 @@ public class tryGUI {
                     "Removing activities", JOptionPane.PLAIN_MESSAGE);
             if (removeActivities != null) {
                 try {
-                    activityManagerGUI.extraction(removeActivities, filePath, 1, 1);
+                    activityManagerGUI.extraction(removeActivities, filePath, true, true);
                 } catch (Exceptions | IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -210,8 +131,5 @@ public class tryGUI {
 
     }
 
-    public static void main(String[] args) {
-        new tryGUI();
-    }
 
 }

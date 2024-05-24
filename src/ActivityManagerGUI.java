@@ -16,8 +16,99 @@ public class ActivityManagerGUI {
     private
     FileManager fileManager = new FileManager();
 
+    //Inserts activities into storage
+    public void insert(int flag, File filePath, Activity activity, JFrame frame){
+        while(true){
+                String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                try {
+                    if(activityName == null){
+                        return;
+                    }
+                    activity.setName(activityName);
+                    if(!activity.getName().isEmpty() && activity.getName() != null){
+                        break;
+                    }
+                } catch (Exceptions ex) {
+
+                }
+            }
+
+            while(true){
+                String date = JOptionPane.showInputDialog(frame,
+                        "<html>Enter date (YYYY-MM-DD)<br>" +
+                        "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
+                        "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                    try {
+                        if(date == null){
+                            return;
+                        }
+                        ActivityManagerGUI.formatValidatorDate(date);
+                        activity.setDate(date);
+                        if(!activity.getDate().isEmpty() && activity.getDate() != null){
+                            break;
+                        }
+                    } catch (Exceptions ex) {
+
+                    }
+                }
+                while(true){
+                    flag = 0;
+                    String startingTime = JOptionPane.showInputDialog(frame,
+                            "<html>Insert starting time (HH:MM)<br>" +
+                            "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
+                            "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                        try {
+                            if(startingTime == null){
+                                return;
+                            }
+                            formatValidatorTime(startingTime, flag);
+                            flag++;
+                            activity.setStartTime(startingTime);
+                            if(!activity.getStartTime().isEmpty() && activity.getStartTime() != null){
+                                break;
+                            }
+                        } catch (Exceptions ex) {
+
+                        }
+                }
+
+                while(true){
+                    String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+
+                        try {
+                            formatValidatorTime(endingTime, flag);
+                            activity.setEndTime(endingTime);
+                            if(endingTime == null){
+                                return;
+                            }
+                            if(activity.getEndTime() != null && !activity.getEndTime().isEmpty()){
+                                break;
+                            }
+                        } catch (Exceptions ex) {
+
+                        }
+
+                }
+
+                String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                activity.setComments(comments);
+                if(comments == null){
+                    return;
+                }
+                String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+                activity.setInterrupts(interrupts);
+                if(interrupts == null){
+                    return;
+                }
+
+                try {
+                    FileManager.appendData(activity, filePath);
+                } catch (IOException ex) {
+                }
+    }
+
     // Extracts selected activities from storage and displays them
-    void extraction(String input, File dataFile, int num, int num2) throws Exceptions, IOException {
+    void extraction(String input, File dataFile, boolean isEdit, boolean isRemove) throws Exceptions, IOException {
         String dateInput = input;
         if (dateInput == null || dateInput.isEmpty()) {
             dateInput = LocalDate.now().toString();
@@ -60,33 +151,8 @@ public class ActivityManagerGUI {
                         textArea.setBackground(Color.PINK);
 
 
-                        if (num == 1) {
-                            textArea.addMouseListener(new MouseAdapter() {
-                                @Override
-                                public void mouseClicked(MouseEvent e) {
-                                    try {
-                                        if (num2 == 1) {
-                                            openEditDialogForRemoval(activity, dataFile);
-                                            displayFrame.dispose();
-                                            return;
-                                        }
-                                        openEditDialog(activity, dataFile);
-                                        displayFrame.dispose();
-                                    } catch (Exceptions | IOException ex) {
-                                        throw new RuntimeException(ex);
-                                    }
-                                }
-
-                                @Override
-                                public void mouseEntered(MouseEvent e) {
-                                    textArea.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                                }
-
-                                @Override
-                                public void mouseExited(MouseEvent e) {
-                                    textArea.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                                }
-                            });
+                        if (isEdit == true) {
+                            edit(isRemove, textArea, activity, displayFrame, dataFile);
                         }
 
                         activityPanel.add(textArea);
@@ -150,10 +216,10 @@ public class ActivityManagerGUI {
             activity.setInterrupts(interruptsField.getText());
 
             FileManager.appendData(activity, dataFile);
-            extraction(activity.getDate(), dataFile, 1, 0);
+            extraction(activity.getDate(), dataFile, true, false);
         }
         else{
-            extraction(activity.getDate(), dataFile, 1, 0);
+            extraction(activity.getDate(), dataFile, true, false);
         }
     }
 
@@ -189,10 +255,10 @@ public class ActivityManagerGUI {
         int result = JOptionPane.showConfirmDialog(tryGUI.frame, panel, "Are you sure?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             removeForRemoval(activity, dataFile);
-            extraction(activity.getDate(), dataFile, 1, 1);
+            extraction(activity.getDate(), dataFile, true, true);
         }
         else {
-            extraction(activity.getDate(), dataFile, 1, 1);
+            extraction(activity.getDate(), dataFile, true, true);
         }
     }
 
@@ -267,5 +333,33 @@ public class ActivityManagerGUI {
         } catch (DateTimeException e) {
             throw new Exceptions.IllegalFormat();
         }
+    }
+    private void edit(boolean isRemove, JTextArea textArea, Activity activity, JFrame displayFrame, File dataFile){
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    if (isRemove == true) {
+                        openEditDialogForRemoval(activity, dataFile);
+                        displayFrame.dispose();
+                        return;
+                    }
+                    openEditDialog(activity, dataFile);
+                    displayFrame.dispose();
+                } catch (Exceptions | IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                textArea.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                textArea.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
     }
 }
