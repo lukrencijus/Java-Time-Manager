@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +12,9 @@ public class Activity{
         String interrupts;
         String comments;
     public
-        String getName() {
+
+        String getName()
+        {
             return name;
         }
         void setName(String name) throws Exceptions{
@@ -25,7 +28,7 @@ public class Activity{
         }
         void setDate(String date) throws Exceptions{
             if(date == null || date.isEmpty()){
-                System.out.println("Local date has been set");
+                JOptionPane.showMessageDialog(tryGUI.frame, "Date has been set to current date", "Current local date", JOptionPane.INFORMATION_MESSAGE);
                 this.date = LocalDate.now().toString();
             }
             else{
@@ -53,7 +56,7 @@ public class Activity{
             if(startTime == null || startTime.isEmpty()){
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
                 this.startTime = LocalTime.now().format(format);
-                System.out.println("Time has been set to current local time");
+                JOptionPane.showMessageDialog(tryGUI.frame, "Time has been set to current time", "Current local time", JOptionPane.INFORMATION_MESSAGE);
             
             }
             else{
@@ -65,28 +68,32 @@ public class Activity{
             return endTime;
         }
 
-        public void setEndTime(String endTime) throws Exceptions.IllegalFormat {
-            if(timeValidator(endTime) == true){
-                this.endTime = endTime;
-            }
-            else{
-                throw new Exceptions.IllegalFormat();
-            }
+    public void setEndTime(String endTime) throws Exceptions.IllegalFormat {
+        if (timeValidator(endTime) == true) {
+            this.endTime = endTime;
+        } else {
+            throw new Exceptions.IllegalFormat();
+        }
+    }
 
-        }
-        @Override
-        public String toString() {
-            return "Activity [name=" + name + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
-                    + ", interrupts=" + interrupts + ", comments=" + comments + "]";
-        }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Activity:              ").append(name).append("\n")
+                .append("Date:                  ").append(date).append("\n")
+                .append("Start Time:        ").append(startTime).append("\n")
+                .append("End Time:         ").append(endTime).append("\n")
+                .append("Interrupts:         ").append(interrupts).append("\n")
+                .append("Comments:     ").append(comments).append("\n");
+        return sb.toString();
+    }
+
+    private boolean timeValidator(String endTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime start = LocalTime.parse(startTime, formatter);
+        LocalTime end = LocalTime.parse(endTime, formatter);
+        return end.isAfter(start);
+    }
     
-        private boolean timeValidator(String endTime){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
-            LocalTime start = LocalTime.parse(startTime, formatter);
-
-            LocalTime end = LocalTime.parse(endTime, formatter);
-
-            return end.isAfter(start);
-        }
 }
