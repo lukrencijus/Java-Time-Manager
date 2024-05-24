@@ -19,92 +19,92 @@ public class ActivityManagerGUI {
     //Inserts activities into storage
     public void insert(int flag, File filePath, Activity activity, JFrame frame){
         while(true){
-                String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                try {
-                    if(activityName == null){
-                        return;
-                    }
-                    activity.setName(activityName);
-                    if(!activity.getName().isEmpty() && activity.getName() != null){
-                        break;
-                    }
-                } catch (Exceptions ex) {
-
+            String activityName = JOptionPane.showInputDialog(frame, "Enter the name of your activity", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+            try {
+                if(activityName == null){
+                    return;
                 }
+                activity.setName(activityName);
+                if(!activity.getName().isEmpty() && activity.getName() != null){
+                    break;
+                }
+            } catch (Exceptions ex) {
+
+            }
+        }
+
+        while(true){
+            String date = JOptionPane.showInputDialog(frame,
+                    "<html>Enter date (YYYY-MM-DD)<br>" +
+                    "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
+                    "Insert activity", JOptionPane.PLAIN_MESSAGE);
+            try {
+                if(date == null){
+                    return;
+                }
+                ActivityManagerGUI.formatValidatorDate(date);
+                activity.setDate(date);
+                if(!activity.getDate().isEmpty() && activity.getDate() != null){
+                    break;
+                }
+            } catch (Exceptions ex) {
+
+            }
+        }
+        while(true){
+            flag = 0;
+            String startingTime = JOptionPane.showInputDialog(frame,
+                    "<html>Insert starting time (HH:MM)<br>" +
+                    "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
+                    "Insert activity", JOptionPane.PLAIN_MESSAGE);
+            try {
+                if(startingTime == null){
+                    return;
+                }
+                formatValidatorTime(startingTime, flag);
+                flag++;
+                activity.setStartTime(startingTime);
+                if(!activity.getStartTime().isEmpty() && activity.getStartTime() != null){
+                    break;
+                }
+            } catch (Exceptions ex) {
+
+            }
+        }
+
+        while(true){
+            String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+
+            try {
+                formatValidatorTime(endingTime, flag);
+                activity.setEndTime(endingTime);
+                if(endingTime == null){
+                    return;
+                }
+                if(activity.getEndTime() != null && !activity.getEndTime().isEmpty()){
+                    break;
+                }
+            } catch (Exceptions ex){
+
             }
 
-            while(true){
-                String date = JOptionPane.showInputDialog(frame,
-                        "<html>Enter date (YYYY-MM-DD)<br>" +
-                        "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to today's</div></html>",
-                        "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                    try {
-                        if(date == null){
-                            return;
-                        }
-                        ActivityManagerGUI.formatValidatorDate(date);
-                        activity.setDate(date);
-                        if(!activity.getDate().isEmpty() && activity.getDate() != null){
-                            break;
-                        }
-                    } catch (Exceptions ex) {
+        }
 
-                    }
-                }
-                while(true){
-                    flag = 0;
-                    String startingTime = JOptionPane.showInputDialog(frame,
-                            "<html>Insert starting time (HH:MM)<br>" +
-                            "<div style='color: gray; font-size: small; text-align: center;'>If nothing is entered, it will be set to current time</div></html>",
-                            "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                        try {
-                            if(startingTime == null){
-                                return;
-                            }
-                            formatValidatorTime(startingTime, flag);
-                            flag++;
-                            activity.setStartTime(startingTime);
-                            if(!activity.getStartTime().isEmpty() && activity.getStartTime() != null){
-                                break;
-                            }
-                        } catch (Exceptions ex) {
+        String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+        activity.setComments(comments);
+        if(comments == null){
+            return;
+        }
+        String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
+        activity.setInterrupts(interrupts);
+        if(interrupts == null){
+            return;
+        }
 
-                        }
-                }
-
-                while(true){
-                    String endingTime = JOptionPane.showInputDialog(frame, "Insert ending time (HH:MM)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-
-                        try {
-                            formatValidatorTime(endingTime, flag);
-                            activity.setEndTime(endingTime);
-                            if(endingTime == null){
-                                return;
-                            }
-                            if(activity.getEndTime() != null && !activity.getEndTime().isEmpty()){
-                                break;
-                            }
-                        } catch (Exceptions ex) {
-
-                        }
-
-                }
-
-                String comments = JOptionPane.showInputDialog(frame, "Insert comments (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                activity.setComments(comments);
-                if(comments == null){
-                    return;
-                }
-                String interrupts = JOptionPane.showInputDialog(frame, "Insert interrupts (optional)", "Insert activity", JOptionPane.PLAIN_MESSAGE);
-                activity.setInterrupts(interrupts);
-                if(interrupts == null){
-                    return;
-                }
-
-                try {
-                    FileManager.appendData(activity, filePath);
-                } catch (IOException ex) {
-                }
+        try {
+            fileManager.appendData(activity, filePath);
+        } catch (IOException ex) {
+        }
     }
 
     // Extracts selected activities from storage and displays them
@@ -118,7 +118,7 @@ public class ActivityManagerGUI {
             ActivityManagerGUI.formatValidatorDate(dateInput);
         }
 
-        List<Activity> activities = FileManager.readDataFromFile(dataFile);
+        List<Activity> activities = fileManager.readDataFromFile(dataFile);
         if (activities == null || activities.isEmpty()) {
             throw new Exceptions.NotFound();
         } else {
@@ -215,7 +215,7 @@ public class ActivityManagerGUI {
             activity.setComments(commentsField.getText());
             activity.setInterrupts(interruptsField.getText());
 
-            FileManager.appendData(activity, dataFile);
+            fileManager.appendData(activity, dataFile);
             extraction(activity.getDate(), dataFile, true, false);
         }
         else{
@@ -263,7 +263,7 @@ public class ActivityManagerGUI {
     }
 
     void removeForRemoval(Activity activity, File dataFile) throws IOException, Exceptions {
-        List<Activity> activities = FileManager.readDataFromFile(dataFile);
+        List<Activity> activities = fileManager.readDataFromFile(dataFile);
         String activityDate = activity.getDate();
         String activityName = activity.getName();
         boolean removed = false;
@@ -294,12 +294,15 @@ public class ActivityManagerGUI {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
             LocalDate parsedDate = LocalDate.parse(dateInput, formatter);
             String formattedTime = parsedDate.format(formatter);
+
             if (!dateInput.equals(formattedTime)) {
                 throw new Exceptions.IllegalFormat();
             }
+
             int year = parsedDate.getYear();
             int month = parsedDate.getMonthValue();
             int day = parsedDate.getDayOfMonth();
+
             if (day > 31 || day < 1 || month > 12 || month < 1 || year < 1) {
                 throw new Exceptions.IllegalFormat();
             }
@@ -338,17 +341,17 @@ public class ActivityManagerGUI {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                try {
-                    if (isRemove == true) {
-                        openEditDialogForRemoval(activity, dataFile);
-                        displayFrame.dispose();
-                        return;
-                    }
-                    openEditDialog(activity, dataFile);
+            try {
+                if (isRemove == true) {
+                    openEditDialogForRemoval(activity, dataFile);
                     displayFrame.dispose();
-                } catch (Exceptions | IOException ex) {
-                    throw new RuntimeException(ex);
+                    return;
                 }
+                openEditDialog(activity, dataFile);
+                displayFrame.dispose();
+            } catch (Exceptions | IOException ex) {
+                throw new RuntimeException(ex);
+            }
             }
 
             @Override

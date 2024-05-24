@@ -9,7 +9,7 @@ public class tryGUI {
     public
         static JFrame frame;
 
-    ImageIcon image;
+        ImageIcon image;
         JLabel label;
 
         JButton insertButton;

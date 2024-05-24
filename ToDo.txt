@@ -1,7 +1,5 @@
 ToDo:
-    Sutvarkyti toString() metodą - gražesnei reprezentacijai veiklų
 
-    Pakeisti extraction() logiką
 
 FixMe:
     
