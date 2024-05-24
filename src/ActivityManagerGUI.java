@@ -138,6 +138,7 @@ public class ActivityManagerGUI {
 
                 JPanel activitiesPanel = new JPanel();
                 activitiesPanel.setLayout(new GridLayout(4, 3));
+                activitiesPanel.setBackground(Color.PINK);
 
                 for (Activity activity : activities) {
                     if (activity.getDate().equals(dateInput)) {
